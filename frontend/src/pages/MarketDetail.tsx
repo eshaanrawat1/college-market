@@ -4,7 +4,7 @@ import { marketAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import TradeModal from '../components/TradeModal';
 import type { Market } from '../types';
-import { formatProbability, formatDate, getStatusColor } from '../utils/helpers';
+import { formatDate } from '../utils/helpers';
 
 const MarketDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,13 +39,22 @@ const MarketDetail = () => {
 
   const handleTradeSuccess = () => {
     setShowTradeModal(false);
-    loadMarket(); // Reload to get updated prices
+    loadMarket();
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'open': return 'text-blue-400 bg-blue-500/10 border-blue-500/30';
+      case 'closed': return 'text-gray-400 bg-gray-500/10 border-gray-500/30';
+      case 'resolved': return 'text-purple-400 bg-purple-500/10 border-purple-500/30';
+      default: return 'text-gray-400 bg-gray-500/10 border-gray-500/30';
+    }
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-xl text-gray-600">Loading market...</div>
+        <div className="text-xl text-gray-400">Loading market...</div>
       </div>
     );
   }
@@ -53,7 +62,7 @@ const MarketDetail = () => {
   if (!market) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-xl text-gray-600">Market not found</div>
+        <div className="text-xl text-gray-400">Market not found</div>
       </div>
     );
   }
@@ -61,7 +70,10 @@ const MarketDetail = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Back Button */}
-      <button onClick={() => navigate('/')} className="text-gray-600 hover:text-gray-900 mb-6">
+      <button 
+        onClick={() => navigate('/')} 
+        className="text-gray-400 hover:text-white mb-6 flex items-center gap-2"
+      >
         ← Back to Markets
       </button>
 
@@ -69,64 +81,64 @@ const MarketDetail = () => {
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">{market.college_name}</h1>
+            <h1 className="text-3xl font-bold mb-2 text-white">{market.college_name}</h1>
             {market.description && (
-              <p className="text-gray-600">{market.description}</p>
+              <p className="text-gray-400">{market.description}</p>
             )}
           </div>
-          <span className={`px-3 py-1 rounded text-sm font-medium ${getStatusColor(market.status)}`}>
+          <span className={`px-3 py-1 rounded text-sm font-medium border ${getStatusColor(market.status)}`}>
             {market.status.toUpperCase()}
           </span>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-1">Total Volume</div>
-            <div className="text-2xl font-bold">
-              {market.total_yes_shares + market.total_no_shares} shares
+          <div className="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <div className="text-sm text-gray-400 mb-1">Total Volume</div>
+            <div className="text-2xl font-bold text-white">
+              ${((market.total_yes_shares + market.total_no_shares) / 100).toFixed(0)}
             </div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-1">Created</div>
-            <div className="text-2xl font-bold">{formatDate(market.created_at)}</div>
+          <div className="bg-slate-700/50 rounded-lg p-4 border border-slate-600">
+            <div className="text-sm text-gray-400 mb-1">Created</div>
+            <div className="text-2xl font-bold text-white">{formatDate(market.created_at)}</div>
           </div>
         </div>
 
         {/* Prices */}
         <div className="grid grid-cols-2 gap-6 mb-8">
           {/* YES */}
-          <div className="bg-green-50 rounded-xl p-6 border-2 border-green-200">
-            <div className="text-sm text-gray-600 mb-2">YES</div>
-            <div className="text-5xl font-bold text-green-600 mb-2">
-              {formatProbability(market.yes_price)}
+          <div className="bg-green-500/10 rounded-xl p-6 border-2 border-green-500/30">
+            <div className="text-sm text-gray-400 mb-2">YES</div>
+            <div className="text-5xl font-bold text-green-400 mb-2">
+              {market.yes_price}%
             </div>
-            <div className="text-sm text-gray-600">
-              {market.total_yes_shares} shares traded
+            <div className="text-sm text-gray-500">
+              {market.total_yes_shares} shares
             </div>
           </div>
 
           {/* NO */}
-          <div className="bg-red-50 rounded-xl p-6 border-2 border-red-200">
-            <div className="text-sm text-gray-600 mb-2">NO</div>
-            <div className="text-5xl font-bold text-red-600 mb-2">
-              {formatProbability(market.no_price)}
+          <div className="bg-red-500/10 rounded-xl p-6 border-2 border-red-500/30">
+            <div className="text-sm text-gray-400 mb-2">NO</div>
+            <div className="text-5xl font-bold text-red-400 mb-2">
+              {market.no_price}%
             </div>
-            <div className="text-sm text-gray-600">
-              {market.total_no_shares} shares traded
+            <div className="text-sm text-gray-500">
+              {market.total_no_shares} shares
             </div>
           </div>
         </div>
 
         {/* Resolution Info */}
         {market.status === 'resolved' && market.resolved_outcome && (
-          <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4 mb-6">
-            <div className="text-sm font-medium text-purple-900 mb-1">Market Resolved</div>
-            <div className="text-lg font-bold text-purple-700">
+          <div className="bg-purple-500/10 border-2 border-purple-500/30 rounded-lg p-4 mb-6">
+            <div className="text-sm font-medium text-purple-400 mb-1">Market Resolved</div>
+            <div className="text-lg font-bold text-purple-300">
               Outcome: {market.resolved_outcome}
             </div>
             {market.resolution_date && (
-              <div className="text-sm text-purple-600 mt-1">
+              <div className="text-sm text-purple-400 mt-1">
                 Resolved on {formatDate(market.resolution_date)}
               </div>
             )}
@@ -135,7 +147,10 @@ const MarketDetail = () => {
 
         {/* Trade Button */}
         {market.status === 'open' && (
-          <button onClick={handleTradeClick} className="btn btn-primary w-full text-lg py-4">
+          <button 
+            onClick={handleTradeClick} 
+            className="btn btn-primary w-full text-lg py-4"
+          >
             Trade on this Market
           </button>
         )}

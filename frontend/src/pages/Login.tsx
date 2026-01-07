@@ -28,12 +28,12 @@ const Login = () => {
   return (
     <div className="max-w-md mx-auto mt-16">
       <div className="card">
-        <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">Login</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Username
             </label>
             <input
@@ -48,7 +48,7 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Password
             </label>
             <input
@@ -62,7 +62,7 @@ const Login = () => {
 
           {/* Error */}
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -78,9 +78,9 @@ const Login = () => {
         </form>
 
         {/* Register Link */}
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Don't have an account?{' '}
-          <Link to="/register" className="text-primary font-medium hover:underline">
+          <Link to="/register" className="text-blue-400 font-medium hover:text-blue-300">
             Sign up
           </Link>
         </div>

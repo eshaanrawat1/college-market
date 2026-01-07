@@ -33,6 +33,13 @@ class User(Base):
     transactions = relationship("Transaction", back_populates="user", cascade="all, delete-orphan")
 
 
+class MarketCategory(str, enum.Enum):
+    UC = "uc"
+    IVY = "ivy"
+    CSU = "csu"
+    INTERNATIONAL = "international"
+    OTHER = "other"
+
 class Market(Base):
     __tablename__ = "markets"
     
@@ -43,6 +50,8 @@ class Market(Base):
     
     yes_price = Column(Integer, nullable=False)
     no_price = Column(Integer, nullable=False)
+    
+    category = Column(Enum(MarketCategory), nullable=False)
     
     total_yes_shares = Column(Integer, default=0)
     total_no_shares = Column(Integer, default=0)

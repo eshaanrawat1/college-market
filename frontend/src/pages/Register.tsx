@@ -35,12 +35,12 @@ const Register = () => {
   return (
     <div className="max-w-md mx-auto mt-16">
       <div className="card">
-        <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">Sign Up</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Username
             </label>
             <input
@@ -55,7 +55,7 @@ const Register = () => {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Email
             </label>
             <input
@@ -69,7 +69,7 @@ const Register = () => {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Password
             </label>
             <input
@@ -87,7 +87,7 @@ const Register = () => {
 
           {/* Error */}
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -103,16 +103,16 @@ const Register = () => {
         </form>
 
         {/* Login Link */}
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-primary font-medium hover:underline">
+          <Link to="/login" className="text-blue-400 font-medium hover:text-blue-300">
             Login
           </Link>
         </div>
 
         {/* Starting Balance Notice */}
-        <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-          <div className="text-sm text-blue-800">
+        <div className="mt-6 bg-blue-500/10 border border-blue-500/30 p-4 rounded-lg">
+          <div className="text-sm text-blue-400">
             🎉 New accounts start with <span className="font-bold">$10,000</span> in play money!
           </div>
         </div>

@@ -1,7 +1,8 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
 
+AllowedCategory = Literal["uc", "ivy", "csu", "international", "other"]
 
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3, max_length=20)
@@ -44,7 +45,8 @@ class MarketBase(BaseModel):
 class MarketCreate(MarketBase):
     yes_price: int = Field(..., ge=1, le=99) 
     no_price: int = Field(..., ge=1, le=99)
-    
+    category: AllowedCategory = "other"
+
     @field_validator('no_price')
     def prices_sum_to_100(cls, v, info):
         yes_price = info.data.get('yes_price')
@@ -62,6 +64,7 @@ class MarketResponse(MarketBase):
     total_no_shares: int
     resolved_outcome: Optional[str] = None
     resolution_date: Optional[datetime] = None
+    category: str
     created_at: datetime
     
     model_config = {"from_attributes": True}

@@ -1,11 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from datetime import datetime
 
 from .database import engine, get_db, Base
-from .models import User, Market, Position, Transaction, MarketStatus, OutcomeType, TransactionType
+from .models import User, Market, Position, Transaction, MarketStatus, OutcomeType, TransactionType, MarketCategory
 from .schemas import (
     UserCreate, UserLogin, UserResponse, TokenResponse,
     MarketCreate, MarketResponse, MarketResolve,
@@ -91,9 +91,14 @@ def get_me(user: User = Depends(get_current_user)):
 
 
 @app.get("/markets", response_model=list[MarketResponse])
-def get_markets(db: Session = Depends(get_db)):
-    """Get all markets."""
-    markets = db.query(Market).all()
+def get_markets(
+    category: MarketCategory | None = Query(default=None),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Market)
+    if category:
+        query = query.filter(Market.category == category)
+    markets = query.all()
     return markets
 
 
@@ -114,20 +119,17 @@ def create_market(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user)
 ):
-    """Create a new market."""
-    
     new_market = Market(
         college_name=market_data.college_name,
         description=market_data.description,
         yes_price=market_data.yes_price,
         no_price=market_data.no_price,
-        status=MarketStatus.OPEN
+        status=MarketStatus.OPEN,
+        category=MarketCategory(market_data.category),
     )
-    
     db.add(new_market)
     db.commit()
     db.refresh(new_market)
-    
     return new_market
 
 

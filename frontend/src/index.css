@@ -1,30 +1,82 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
+@layer base {
+  body {
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%);
+    color: rgb(243 244 246);
+    min-height: 100vh;
+  }
 }
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-200;
   }
   
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-dark;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    @apply text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02];
+  }
+  
+  .btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    @apply text-white shadow-lg shadow-green-500/30 hover:shadow-xl;
+  }
+  
+  .btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    @apply text-white shadow-lg shadow-red-500/30 hover:shadow-xl;
   }
   
   .btn-outline {
-    @apply border-2 border-gray-300 text-gray-700 hover:bg-gray-50;
+    @apply border-2 border-blue-500/30 bg-blue-500/5 text-blue-400 hover:bg-blue-500/10 hover:border-blue-500/50;
   }
-}
-
-@layer components {
+  
   .card {
-    @apply bg-white p-6 rounded-lg shadow-sm border border-gray-100;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+    @apply rounded-xl border border-blue-500/20 p-6 backdrop-blur-sm;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .card:hover {
+    @apply border-blue-500/40;
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
   }
   
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+    @apply w-full px-4 py-3 bg-slate-800/50 border border-blue-500/20 rounded-lg text-white placeholder-gray-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.7) 100%);
+  }
+
+  .market-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+    @apply rounded-xl border border-blue-500/20 p-5 backdrop-blur-sm cursor-pointer;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .market-card:hover {
+    @apply border-blue-500/50;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3);
+  }
+
+  .gradient-blue {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+  }
+
+  .gradient-green {
+    background: linear-gradient(135deg, #065f46 0%, #10b981 50%, #34d399 100%);
+  }
+
+  .gradient-red {
+    background: linear-gradient(135deg, #991b1b 0%, #ef4444 50%, #f87171 100%);
+  }
+
+  .glass-effect {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(59, 130, 246, 0.2);
   }
 }

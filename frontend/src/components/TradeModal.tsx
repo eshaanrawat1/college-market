@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { tradingAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import type { Market } from '../types';
-import { formatMoney, formatProbability } from '../utils/helpers';
+import { formatMoney } from '../utils/helpers';
 
 interface TradeModalProps {
   market: Market;
@@ -50,55 +50,66 @@ const TradeModal = ({ market, onClose, onSuccess }: TradeModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="glass-effect rounded-2xl border border-blue-500/30 p-8 max-w-md w-full shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Trade</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+            Place Order
+          </h2>
+          <button 
+            onClick={onClose} 
+            className="text-gray-400 hover:text-white text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-blue-500/10 transition-colors"
+          >
             ×
           </button>
         </div>
 
         {/* Market Name */}
         <div className="mb-6">
-          <div className="text-sm text-gray-500 mb-1">Market</div>
-          <div className="font-semibold">{market.college_name}</div>
+          <div className="text-sm text-gray-400 mb-1">Market</div>
+          <div className="font-semibold text-white text-lg">{market.college_name}</div>
         </div>
 
         {/* Outcome Selection */}
-        <div className="mb-4">
-          <label className="text-sm font-medium text-gray-700 mb-2 block">Outcome</label>
-          <div className="grid grid-cols-2 gap-2">
+        <div className="mb-6">
+          <label className="text-sm font-medium text-gray-300 mb-3 block">Outcome</label>
+          <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setOutcome('YES')}
-              className={`p-3 rounded-lg border-2 font-medium transition-colors ${
+              className={`relative overflow-hidden p-5 rounded-xl border-2 font-medium transition-all ${
                 outcome === 'YES'
-                  ? 'border-green-500 bg-green-50 text-green-700'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-green-500 bg-green-500/20 text-green-400 shadow-lg shadow-green-500/20'
+                  : 'border-blue-500/30 bg-blue-500/5 text-gray-300 hover:border-blue-500/50 hover:bg-blue-500/10'
               }`}
             >
-              <div className="text-xs mb-1">YES</div>
-              <div className="text-lg font-bold">{formatProbability(market.yes_price)}</div>
+              <div className="text-xs mb-2 opacity-75">YES</div>
+              <div className="text-3xl font-bold">{market.yes_price}¢</div>
+              {outcome === 'YES' && (
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent"></div>
+              )}
             </button>
 
             <button
               onClick={() => setOutcome('NO')}
-              className={`p-3 rounded-lg border-2 font-medium transition-colors ${
+              className={`relative overflow-hidden p-5 rounded-xl border-2 font-medium transition-all ${
                 outcome === 'NO'
-                  ? 'border-red-500 bg-red-50 text-red-700'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-red-500 bg-red-500/20 text-red-400 shadow-lg shadow-red-500/20'
+                  : 'border-blue-500/30 bg-blue-500/5 text-gray-300 hover:border-blue-500/50 hover:bg-blue-500/10'
               }`}
             >
-              <div className="text-xs mb-1">NO</div>
-              <div className="text-lg font-bold">{formatProbability(market.no_price)}</div>
+              <div className="text-xs mb-2 opacity-75">NO</div>
+              <div className="text-3xl font-bold">{market.no_price}¢</div>
+              {outcome === 'NO' && (
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent"></div>
+              )}
             </button>
           </div>
         </div>
 
         {/* Shares Input */}
-        <div className="mb-4">
-          <label className="text-sm font-medium text-gray-700 mb-2 block">Shares</label>
+        <div className="mb-6">
+          <label className="text-sm font-medium text-gray-300 mb-2 block">Shares</label>
           <input
             type="number"
             value={shares}
@@ -110,18 +121,18 @@ const TradeModal = ({ market, onClose, onSuccess }: TradeModalProps) => {
         </div>
 
         {/* Summary */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-4 space-y-2">
+        <div className="glass-effect rounded-xl p-5 mb-6 space-y-3 border border-blue-500/20">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Price per share</span>
-            <span className="font-medium">{currentPrice}¢</span>
+            <span className="text-gray-400">Price per share</span>
+            <span className="font-medium text-white">{currentPrice}¢</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Shares</span>
-            <span className="font-medium">{sharesNum}</span>
+            <span className="text-gray-400">Shares</span>
+            <span className="font-medium text-white">{sharesNum}</span>
           </div>
-          <div className="border-t border-gray-200 pt-2 flex justify-between">
-            <span className="font-semibold">Total Cost</span>
-            <span className="font-bold text-lg">{formatMoney(totalCost)}</span>
+          <div className="border-t border-blue-500/20 pt-3 flex justify-between">
+            <span className="font-semibold text-white">Total Cost</span>
+            <span className="font-bold text-xl text-white">{formatMoney(totalCost)}</span>
           </div>
           <div className="text-xs text-gray-500">
             Balance after: {formatMoney(user!.balance - totalCost)}
@@ -130,12 +141,18 @@ const TradeModal = ({ market, onClose, onSuccess }: TradeModalProps) => {
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">{error}</div>
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-lg mb-4 text-sm">
+            {error}
+          </div>
         )}
 
         {/* Actions */}
         <div className="flex gap-3">
-          <button onClick={onClose} className="btn btn-outline flex-1" disabled={loading}>
+          <button 
+            onClick={onClose} 
+            className="btn btn-outline flex-1" 
+            disabled={loading}
+          >
             Cancel
           </button>
           <button
